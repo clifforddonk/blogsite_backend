@@ -31,22 +31,14 @@ public class UserService {
         return userRepository.findById(id).orElse(null);
     }
 
-    // Update a user (re-hash password if updated)
+
     public User updateUser(String id, User updatedUser) {
         User user = userRepository.findById(id).orElse(null);
         if (user != null) {
-            user.setUsername(updatedUser.getUsername());
-            user.setEmail(updatedUser.getEmail());
-
-            // Only hash password if it has been updated
-            if (!updatedUser.getPassword().equals(user.getPassword())) {
-                user.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
-            }
-
-            user.setRole(updatedUser.getRole()); // Update the role field
+            user.setUsername(updatedUser.getUsername()); // Only update the username
             return userRepository.save(user);
         }
-        return null;
+        return null; // Return null if the user is not found
     }
 
     // Delete a user
