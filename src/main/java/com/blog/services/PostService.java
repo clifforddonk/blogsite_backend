@@ -46,8 +46,6 @@ public class PostService {
                 .map(post -> {
                     post.setTitle(updatedPost.getTitle());
                     post.setContent(updatedPost.getContent());
-                    post.setImageUrl(updatedPost.getImageUrl());
-                    post.setVideoUrl(updatedPost.getVideoUrl());
                     return postRepository.save(post);
                 })
                 .orElse(null);
