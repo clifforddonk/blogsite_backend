@@ -14,5 +14,13 @@ public class User {
     private String username;
     private String email;
     private String password;
-    private String role; // Single role (e.g., USER, ADMIN)
+
+    // Define the Role enum with small letters
+    public enum Role {
+        user, // Default role
+        admin
+    }
+
+    // Change the role field to use the enum type
+    private Role role = Role.user; // Set default role to "user"
 }
