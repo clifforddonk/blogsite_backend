@@ -1,5 +1,6 @@
 package com.blog.controllers;
 
+import com.blog.dtos.PostDTO;
 import com.blog.models.Post;
 import com.blog.services.PostService;
 import com.blog.services.CloudinaryService; // Import CloudinaryService
@@ -68,7 +69,7 @@ public class PostController {
     // Get all posts
     @GetMapping
     public ResponseEntity<Map<String, Object>> getAllPosts() {
-        List<Post> posts = postService.getAllPosts();
+        List<PostDTO> posts = postService.getAllPosts();
         if (posts.isEmpty()) {
             return createResponse(HttpStatus.NO_CONTENT, "No posts available", null);
         }
@@ -78,7 +79,7 @@ public class PostController {
     // Get posts by author ID
     @GetMapping("/author/{authorId}")
     public ResponseEntity<Map<String, Object>> getPostsByAuthorId(@PathVariable String authorId) {
-        List<Post> posts = postService.getPostsByAuthorId(authorId);
+        List<PostDTO> posts = postService.getPostsByAuthorId(authorId);
         if (posts.isEmpty()) {
             return createResponse(HttpStatus.NO_CONTENT, "No posts found for this author", null);
         }
@@ -88,7 +89,7 @@ public class PostController {
     // Get a post by ID
     @GetMapping("/{id}")
     public ResponseEntity<Map<String, Object>> getPostById(@PathVariable String id) {
-        Post post = postService.getPostById(id);
+        PostDTO post = postService.getPostById(id);
         if (post == null) {
             return createResponse(HttpStatus.NOT_FOUND, "Post not found", null);
         }
@@ -108,7 +109,7 @@ public class PostController {
     // Delete a post
     @DeleteMapping("/{id}")
     public ResponseEntity<Map<String, Object>> deletePost(@PathVariable String id) {
-        Post existingPost = postService.getPostById(id);
+        PostDTO existingPost = postService.getPostById(id);
         if (existingPost == null) {
             return createResponse(HttpStatus.NOT_FOUND, "Post not found", null);
         }
