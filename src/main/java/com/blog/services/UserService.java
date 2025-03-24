@@ -1,5 +1,6 @@
 package com.blog.services;
 
+import com.blog.dtos.UserDTO;
 import com.blog.models.User;
 import com.blog.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,17 +14,30 @@ import java.util.List;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final BCryptPasswordEncoder passwordEncoder; // Inject BCryptPasswordEncoder
+    private final BCryptPasswordEncoder passwordEncoder;
 
-    // Create a new user (hash the password before saving)
+    // Map User to UserDTO (no password leak)
+    public UserDTO mapToUserDTO(User user) {
+        return new UserDTO(
+                user.getId(),
+                user.getUsername(),
+                user.getEmail(),
+                user.getRole().name()
+        );
+    }
+
+    // Create a new user with hashed password
     public User createUser(User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword())); // Hash password
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
 
-    // Get all users
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    // Get all users (returning DTOs)
+    public List<UserDTO> getAllUsers() {
+        return userRepository.findAll()
+                .stream()
+                .map(this::mapToUserDTO)
+                .toList();
     }
 
     // Get user by ID
@@ -31,17 +45,17 @@ public class UserService {
         return userRepository.findById(id).orElse(null);
     }
 
-
+    // Update username only
     public User updateUser(String id, User updatedUser) {
         User user = userRepository.findById(id).orElse(null);
         if (user != null) {
-            user.setUsername(updatedUser.getUsername()); // Only update the username
+            user.setUsername(updatedUser.getUsername());
             return userRepository.save(user);
         }
-        return null; // Return null if the user is not found
+        return null;
     }
 
-    // Delete a user
+    // Delete user by ID
     public void deleteUser(String id) {
         userRepository.deleteById(id);
     }
