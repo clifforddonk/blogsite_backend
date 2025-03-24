@@ -1,5 +1,6 @@
 package com.blog.controllers;
 
+import com.blog.dtos.UserDTO;
 import com.blog.models.User;
 import com.blog.services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -24,8 +25,8 @@ public class UserController {
 
     // Get all users
     @GetMapping
-    public ResponseEntity<List<User>> getAllUsers() {
-        List<User> users = userService.getAllUsers();
+    public ResponseEntity<List<UserDTO>> getAllUsers() {
+        List<UserDTO> users = userService.getAllUsers();
         return ResponseEntity.ok(users);
     }
 
